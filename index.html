@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SearchO - Search Assistant</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: stretch; /* Stretch containers to fill the height */
+            width: 100%;
+            max-width: 1200px; /* Maximum width for the content */
+            height: 90vh; /* Ensure vertical alignment within the screen */
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .history-container {
+            width: 300px;
+            background-color: #1c1c1c;
+            padding: 20px;
+            border-radius: 10px 0 0 10px; /* Rounded corners on the left */
+            overflow-y: auto;
+        }
+
+        .history-container h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .history-container ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .history-container li {
+            background-color: #333;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .main-container {
+            flex-grow: 1;
+            background-color: #222;
+            padding: 20px;
+            overflow-y: auto;
+            border-radius: 0 10px 10px 0; /* Rounded corners on the right */
+        }
+
+        .search-box-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 600px;
+            background-color: #333;
+            padding: 15px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box input {
+            background-color: transparent;
+            border: none;
+            color: white;
+            width: 90%;
+            padding: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .search-box button {
+            background-color: transparent;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .search-box button:hover {
+            background-color: #444;
+        }
+
+        .output-results {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .code-result pre {
+            background-color: #222;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 600px;
+            color: white;
+        }
+
+        /* "Read More" Section */
+        .read-more {
+            color: blue;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .full-result {
+            display: none;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: auto; /* Allow content to expand vertically */
+            }
+
+            .history-container {
+                width: 100%;
+                border-radius: 10px; /* Rounded corners for smaller screens */
+                margin-bottom: 10px;
+            }
+
+            .main-container {
+                width: 100%;
+                border-radius: 10px; /* Rounded corners for smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Search History Panel -->
+        <div class="history-container">
+            <h3>Search History</h3>
+            {% if history %}
+                <ul>
+                    {% for entry in history %}
+                        <li>
+                            <strong</strong> {{ entry.query }}<br>
+                            
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        
+        <!-- Main Content Area for Search Box and Results -->
+        <div class="main-container">
+            <!-- Search Box -->
+            <div class="search-box-container">
+                <form method="POST" action="/">
+                    <div class="search-box">
+                        <input type="text" name="query" placeholder="Enter your search...">
+                        <button type="submit">
+                            <span class="material-icons">search</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Output Result -->
+            <div>
+                <h2>Results</h2>
+                {% if code_results %}
+                    <div class="code-result">
+                        <p>{{ code_results }}</p>
+                        <span class="read-more" onclick="toggleFullResult()"></span>
+                        <div class="full-result">
+                            <p>{{ code_results }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleFullResult() {
+            var fullResult = document.querySelector('.full-result');
+            var readMoreText = document.querySelector('.read-more');
+            if (fullResult.style.display === 'none' || fullResult.style.display === '') {
+                fullResult.style.display = 'block';
+                readMoreText.innerText = 'Read Less';
+            } else {
+                fullResult.style.display = 'none';
+                readMoreText.innerText = 'Read More';
+            }
+        }
+    </script>
+</body>
+</html>
